@@ -264,7 +264,7 @@ trait Schema[S <: Schema[S]] {theScheme: S =>
 		def clearValue(prop: S#PROP[_]): Unit = if (hasValue(prop)) {
 			_values(prop.index) = null
 			propsChanged += prop
-			if (prop.field != null) prop.field.set(this, prop.asNull)
+			if (prop.field != null) prop.field.set(this, prop.default)
 		}
 
 		def changed = propsChanged.nonEmpty
@@ -289,7 +289,7 @@ trait Schema[S <: Schema[S]] {theScheme: S =>
 			if (propsFields.nonEmpty) propsFields.foreach { p =>
 				val v0 = _values(p.index)
 				val v1 = p.field.get(this)
-				if (v0 != v1 && (v0 != null || p.asNull != v1)) {
+				if (v0 != v1 && (v0 != null || p.default != v1)) {
 					_values(p.index) = v1
 					propsChanged += p
 				}

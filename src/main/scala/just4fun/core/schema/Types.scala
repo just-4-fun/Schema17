@@ -11,7 +11,7 @@ abstract class PropType[T](implicit val mft: Manifest[T]) {
 	def asLong(v: Any): Long = utils.any2long(v)
 	def asDouble(v: Any): Double = utils.any2double(v)
 	def asBoolean(v: Any): Boolean = utils.any2boolean(v)
-	def asNull: T = null.asInstanceOf[T]
+	def default: T = null.asInstanceOf[T]
 }
 
 
@@ -25,18 +25,23 @@ abstract class BinaryPropType extends PropType[Array[Byte]] {
 }
 abstract class LongPropType extends PropType[Long] {
 	def evaluate(v: Any): Long = asLong(v)
+	override def default = 0L
 }
 abstract class IntPropType extends PropType[Int] {
 	def evaluate(v: Any): Int = utils.any2int(v)
+	override def default = 0
 }
 abstract class DoublePropType extends PropType[Double] {
 	def evaluate(v: Any): Double = asDouble(v)
+	override def default = 0d
 }
 abstract class FloatPropType extends PropType[Float] {
 	def evaluate(v: Any): Float = utils.any2float(v)
+	override def default = 0f
 }
 abstract class BooleanPropType extends PropType[Boolean] {
 	def evaluate(v: Any): Boolean = asBoolean(v)
+	override def default = false
 }
 abstract class ObjectPropType[T<:Schema[T]](implicit override val mft: Manifest[T#OBJ]) extends PropType[T#OBJ] {
 	val schema: T
